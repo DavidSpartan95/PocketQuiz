@@ -1,4 +1,4 @@
-package com.davidspartan.pocketquiz.data
+package com.davidspartan.pocketquiz.model.api
 
 data class SimplePokemon(
     val id: Int,

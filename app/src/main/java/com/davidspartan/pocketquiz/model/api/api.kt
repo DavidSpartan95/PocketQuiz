@@ -1,4 +1,4 @@
-package com.davidspartan.pocketquiz.data
+package com.davidspartan.pocketquiz.model.api
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -7,7 +7,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-suspend fun apiCall(id: Int): SimplePokemon? {
+
+suspend fun getPokemonService(id: Int): SimplePokemon? {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
 
