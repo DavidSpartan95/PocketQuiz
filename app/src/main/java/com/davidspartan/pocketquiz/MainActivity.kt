@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +24,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.davidspartan.pocketquiz.model.api.SimplePokemon
 import com.davidspartan.pocketquiz.model.api.getPokemonService
 import com.davidspartan.pocketquiz.ui.theme.PocketQuizTheme
@@ -93,9 +96,12 @@ fun Greeting(
 fun PokemonImage(
     imageUrl: String ,modifier: Modifier = Modifier,
 ) {
-    AsyncImage(
+    SubcomposeAsyncImage(
         model = imageUrl,
-        contentDescription = "Translated description of what the image contains",
+        loading = {
+            CircularProgressIndicator()
+        },
+        contentDescription = "",
         modifier = modifier.size(200.dp)
     )
 }
