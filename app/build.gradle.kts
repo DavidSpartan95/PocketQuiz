@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     implementation("io.coil-kt:coil-compose:2.7.0")//used for url images
     implementation("io.coil-kt:coil:2.7.0")

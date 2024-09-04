@@ -4,52 +4,119 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.compose.rememberNavController
 import coil.compose.SubcomposeAsyncImage
-import com.davidspartan.pocketquiz.model.api.SimplePokemon
-import com.davidspartan.pocketquiz.model.api.getPokemonService
-import com.davidspartan.pocketquiz.ui.theme.PocketQuizTheme
 import com.davidspartan.pocketquiz.viewmodel.PokemonViewModel
-import kotlinx.coroutines.launch
-import kotlin.random.Random
+import com.davidspartan.pocketquiz.viewmodel.SampleViewModel
 
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: PokemonViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PocketQuizTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        viewModel = viewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "auth"){
 
+                composable("about"){
+                    Column {
+                        Text("About Screen")
+                    }
+                    
+                }
+                navigation(
+                    startDestination = "login",
+                    route = "auth"
+                ){
+                    composable("login"){
+                        val viewModel = it.sharedViewModel<SampleViewModel>(navController = navController)
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .then(Modifier),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+
+                            Button(onClick = {
+                                navController.navigate("main"){
+                                    popUpTo("auth"){
+                                        inclusive = true
+                                    }
+                                }
+                            }) {
+                                Text(text = "Login")
+                            }
+                        }
+                    }
+                    composable("register"){
+                        val viewModel = it.sharedViewModel<SampleViewModel>(navController = navController)
+                    }
+                    composable("forgot_password"){
+                        val viewModel = it.sharedViewModel<SampleViewModel>(navController = navController)
+                    }
+                }
+                navigation(
+                    startDestination = "game",
+                    route = "main"
+                ){
+                    composable("game"){
+                        val viewModel = it.sharedViewModel<PokemonViewModel>(navController = navController)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .then(Modifier),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+                            GameView(
+                                viewModel = viewModel
+                            )
+                            Button(onClick = {
+                                navController.navigate("game2")
+                            }) {
+                                Text(text = "Login")
+                            }
+                        }
+                        
+                    }
+                    composable("game2"){
+                        val viewModel = it.sharedViewModel<PokemonViewModel>(navController = navController)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .then(Modifier),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){ GameView(
+                            viewModel = viewModel
+                        ) }
+
+                    }
                 }
             }
         }
@@ -58,33 +125,26 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Greeting(
+fun GameView(
     viewModel: PokemonViewModel,
     modifier: Modifier = Modifier
 ) {
     val pokemon by viewModel.pokemon.observeAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchRandomPokemon()
+        //viewModel.fetchRandomPokemon()
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .then(modifier),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column{
         Button(onClick = {
             viewModel.fetchRandomPokemon()
-            println("ABOVE$pokemon")
 
         }) {
             Text("Fetch Random Pokemon")
         }
 
         if (pokemon?.spriteUrl.isNullOrEmpty()) {
-            Text(text = "Loading...")
+            Text(text = "press fetch pokemon...")
         }else{
             PokemonImage(imageUrl = pokemon?.spriteUrl!!)
         }
@@ -104,4 +164,13 @@ fun PokemonImage(
         contentDescription = "",
         modifier = modifier.size(200.dp)
     )
+}
+
+@Composable
+inline fun <reified T : ViewModel>NavBackStackEntry.sharedViewModel(navController: NavController): T {
+    val navGraphRote = destination.parent?.route ?: return viewModel()
+    val parentEntry = remember(this){
+        navController.getBackStackEntry(navGraphRote)
+    }
+    return viewModel(parentEntry)
 }
