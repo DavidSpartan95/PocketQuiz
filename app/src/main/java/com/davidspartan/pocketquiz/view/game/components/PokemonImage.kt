@@ -1,4 +1,4 @@
-package com.davidspartan.pocketquiz.view.gamescreen
+package com.davidspartan.pocketquiz.view.game.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator

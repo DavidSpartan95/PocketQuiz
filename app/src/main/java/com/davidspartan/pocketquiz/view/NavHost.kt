@@ -17,9 +17,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.davidspartan.pocketquiz.view.gamescreen.GameView
+import com.davidspartan.pocketquiz.view.auth.LoginView
+import com.davidspartan.pocketquiz.view.game.GameView
 import com.davidspartan.pocketquiz.viewmodel.PokemonViewModel
-import com.davidspartan.pocketquiz.viewmodel.SampleViewModel
+import com.davidspartan.pocketquiz.viewmodel.AuthViewModel
 
 @Composable
 fun MyNavHost(navController: NavHostController) {
@@ -36,30 +37,17 @@ fun MyNavHost(navController: NavHostController) {
             route = "auth"
         ) {
             composable("login") {
-                val viewModel = it.sharedViewModel<SampleViewModel>(navController = navController)
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Button(onClick = {
-                        navController.navigate("main") {
-                            popUpTo("auth") {
-                                inclusive = true
-                            }
-                        }
-                    }) {
-                        Text(text = "Login")
-                    }
-                }
+                val viewModel = it.sharedViewModel<AuthViewModel>(navController = navController)
+                LoginView(
+                    viewModel = viewModel,
+                    navController = navController
+                    )
             }
             composable("register") {
-                val viewModel = it.sharedViewModel<SampleViewModel>(navController = navController)
+                val viewModel = it.sharedViewModel<AuthViewModel>(navController = navController)
             }
             composable("forgot_password") {
-                val viewModel = it.sharedViewModel<SampleViewModel>(navController = navController)
+                val viewModel = it.sharedViewModel<AuthViewModel>(navController = navController)
             }
         }
 
