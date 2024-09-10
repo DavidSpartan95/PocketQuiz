@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 
-suspend fun getPokemonService(id: Int): SimplePokemon? {
+suspend fun getPokemonService(id: Int): SimplePokemon {
     return withContext(Dispatchers.IO) {
         val client = OkHttpClient()
 
@@ -44,11 +44,29 @@ suspend fun getPokemonService(id: Int): SimplePokemon? {
             // Return the SimplePokemon object with the sprite URL set
             simplePokemon.let {
                 simplePokemon?.spriteUrl = spriteUrl
+                return@withContext simplePokemon!!
             }
-            simplePokemon
         } else {
             println("Error: ${response.code}")
-            null // Return null on error
+            return@withContext getDefaultPokemon()
         }
+
     }
+}
+fun getDefaultPokemon(): SimplePokemon {
+    return SimplePokemon(
+        id = 0, // Default ID
+        name = "Unknown", // Default name
+        stats = listOf(
+            Stat(
+                base_stat = 0, // Default base_stat
+                effort = 0, // Default effort
+                stat = StatX(
+                    name = "none", // Default stat name
+                    url = "https://example.com/stat" // Default URL
+                )
+            )
+        ),
+        spriteUrl = "https://placeholder.com/sprite" // Default sprite URL
+    )
 }

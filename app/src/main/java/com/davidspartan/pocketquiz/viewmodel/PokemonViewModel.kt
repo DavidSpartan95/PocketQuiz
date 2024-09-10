@@ -19,8 +19,7 @@ class PokemonViewModel: ViewModel() {
     fun fetchRandomPokemon() {
         viewModelScope.launch {
             try {
-                val poke = repository.getPokemon(Random.nextInt(1, 722))
-                _pokemon.value = poke
+                _pokemon.value = repository.getPokemon(Random.nextInt(1, 722))
             } catch (e: Exception) {
                 Log.d("Error fetching pokemon", e.toString())
             }
