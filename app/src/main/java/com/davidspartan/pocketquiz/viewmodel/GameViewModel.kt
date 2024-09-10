@@ -43,7 +43,7 @@ class GameViewModel: ViewModel() {
     }
     fun onAnswer(selectedOption: String,correctAnswer:String ) {
 
-        if (selectedOption == correctAnswer){
+        if (selectedOption == correctAnswer.capitalize()){
             _score.value = _score.value?.plus(1)
         }else {
             viewModelScope.launch {
@@ -57,7 +57,6 @@ class GameViewModel: ViewModel() {
             try {
                 // Fetch a random Pokémon
                 val randomPokemon = repository.getPokemon(Random.nextInt(1, 722))
-
                 // Update LiveData with the fetched Pokémon
                 _pokemon.value = randomPokemon
                 // Automatically generate options based on the fetched Pokémon
@@ -68,5 +67,4 @@ class GameViewModel: ViewModel() {
             }
         }
     }
-
 }
