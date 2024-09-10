@@ -8,7 +8,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -42,12 +41,15 @@ fun GameView(
     ) {
         Text(text = "Score: $score")
         when (gameState) {
-            GameState.loading -> {
+            GameState.LOADING -> {
                 CircularProgressIndicator()
                 gameViewModel.startGame()
             }
+            GameState.RELOAD ->{
+                CircularProgressIndicator()
+            }
 
-            GameState.playing -> {
+            GameState.PLAYING -> {
                 pokemon?.name?.let { pokemonName ->
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -101,7 +103,7 @@ fun GameView(
                 }
 
             }
-            GameState.result ->{
+            GameState.RESULT ->{
                 Button(onClick = { gameViewModel.startGame() }) {
                     Text(text = "Next pokemon")
                 }
