@@ -1,9 +1,12 @@
 package com.davidspartan.pocketquiz.view.game
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -13,6 +16,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.davidspartan.pocketquiz.ui.theme.orbitronBold
 import com.davidspartan.pocketquiz.view.game.components.ChoiceButton
 import com.davidspartan.pocketquiz.view.game.components.PokemonImage
 import com.davidspartan.pocketquiz.viewmodel.GameState
@@ -33,13 +40,19 @@ fun GameView(
     val options by gameViewModel.options.observeAsState()
     val gameState by gameViewModel.gameState.observeAsState()
 
-
+    Row(
+        Modifier,
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Center
+        ) {
+        Text(text = "Score: $score",Modifier.padding(50.dp),  fontFamily = orbitronBold, fontSize = 30.sp)
+    }
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Score: $score")
+
         when (gameState) {
             GameState.LOADING -> {
                 CircularProgressIndicator()
@@ -52,13 +65,15 @@ fun GameView(
             GameState.PLAYING -> {
                 pokemon?.name?.let { pokemonName ->
                     Column(
+                        Modifier
+                        ,
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         pokemon!!.spriteUrl?.let { PokemonImage(imageUrl = it) }
 
 
-                        Row {
+                        Row() {
                             ChoiceButton(
                                 text = options?.get(0) ?: "",
                                 onClick = {
@@ -79,7 +94,7 @@ fun GameView(
                                 }
                             )
                         }
-                        Row {
+                        Row() {
                             ChoiceButton(
                                 text = options?.get(2) ?: "",
                                 onClick = {

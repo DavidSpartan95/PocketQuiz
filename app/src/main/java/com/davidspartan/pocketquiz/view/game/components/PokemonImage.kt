@@ -17,6 +17,6 @@ fun PokemonImage(
             CircularProgressIndicator()
         },
         contentDescription = "",
-        modifier = modifier.size(200.dp)
+        modifier = modifier.size(225.dp)
     )
 }
