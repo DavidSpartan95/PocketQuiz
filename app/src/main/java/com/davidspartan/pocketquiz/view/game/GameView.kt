@@ -2,8 +2,10 @@ package com.davidspartan.pocketquiz.view.game
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,6 +42,7 @@ fun GameView(
     val options by gameViewModel.options.observeAsState()
     val gameState by gameViewModel.gameState.observeAsState()
 
+
     Row(
         Modifier,
         verticalAlignment = Alignment.Top,
@@ -50,7 +53,8 @@ fun GameView(
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
 
         when (gameState) {
@@ -73,7 +77,7 @@ fun GameView(
                         pokemon!!.spriteUrl?.let { PokemonImage(imageUrl = it) }
 
 
-                        Row() {
+                        Row(Modifier.padding(5.dp)) {
                             ChoiceButton(
                                 text = options?.get(0) ?: "",
                                 onClick = {
@@ -83,7 +87,7 @@ fun GameView(
                                     )
                                 }
                             )
-
+                            Spacer(modifier = Modifier.padding(5.dp))
                             ChoiceButton(
                                 text = options?.get(1) ?: "",
                                 onClick = {
@@ -94,7 +98,7 @@ fun GameView(
                                 }
                             )
                         }
-                        Row() {
+                        Row(Modifier.padding(5.dp)) {
                             ChoiceButton(
                                 text = options?.get(2) ?: "",
                                 onClick = {
@@ -104,6 +108,7 @@ fun GameView(
                                     )
                                 }
                             )
+                            Spacer(modifier = Modifier.padding(5.dp))
                             ChoiceButton(
                                 text = options?.get(3) ?: "",
                                 onClick = {
