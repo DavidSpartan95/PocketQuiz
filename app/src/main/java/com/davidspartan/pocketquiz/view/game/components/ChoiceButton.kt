@@ -44,7 +44,6 @@ fun ChoiceButton(
 
     Button(
         onClick = {
-            //clickSound.start().wait()
             onClick.invoke()
         },
         modifier = Modifier.size(width = (screenWidth * 0.45).dp, height = 50.dp),
